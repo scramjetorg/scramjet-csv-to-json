@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+/* eslint-disable node/shebang */
+/* eslint-disable no-process-exit */
+/* eslint-disable node/no-unpublished-require */
+
+const [, , _sfsize, _sfiles] = process.argv;
+const { resolve } = require("path");
+const si = require("si");
+
+if (!_sfsize) help();
+
+const [fsize, files] = [si.bin.parse(_sfsize), si.parse(_sfiles)];
+
+if (fsize <= 0 || files <= 0 || isNaN(fsize + files)) help();
+
+const workdir = resolve(__dirname, "../.work");
+
+require("../lib/generate")({workdir, fsize, files})
+    .catch(err => {
+        console.error(err.stack);
+        process.exit(2);
+    });
+
+function help() {
+    console.error("Usage: generate.js <number-of-files> <size-of-file>");
+    process.exit(1);
+}

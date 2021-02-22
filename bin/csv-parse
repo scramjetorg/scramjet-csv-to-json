@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+/* eslint-disable node/shebang */
+/* eslint-disable no-process-exit */
+/* eslint-disable node/no-unpublished-require */
+
+const { resolve } = require("path");
+const { DataStream } = require("scramjet");
+const workdir = process.argv[2]
+    ? resolve(__dirname, "../.work")
+    : resolve(process.cwd(), process.argv[2]);
+const threads = 8;
+
+DataStream.from(require("../lib/csv-parser"), {workdir, threads})
+    .each(console.log)
+    .run()
+    .catch(err => {
+        console.error(err.stack);
+        process.exit(2);
+    });
+
