@@ -11,5 +11,5 @@ Run the parser:
 
 ```sh
 # This will parse the data and output it as JSON
-./bin/csv-parse
+./bin/csv-parse ./
 ```
